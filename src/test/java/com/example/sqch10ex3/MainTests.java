@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -34,8 +35,9 @@ class MainTests {
 		PaymentDetails p = new PaymentDetails();
 		p.setAmount(1000);
 
-		when(paymentService.processPayment())
-				.thenReturn(p);
+		given(paymentService.processPayment()).willReturn(p);
+
+		//when(paymentService.processPayment()).thenReturn(p);
 
 		var expected = mapper.writeValueAsString(p);
 
@@ -51,8 +53,9 @@ class MainTests {
 		ErrorDetails e = new ErrorDetails();
 		e.setMessage("Not enough money to make the payment.");
 
-		when(paymentService.processPayment())
-				.thenThrow(new NotEnoughMoneyException());
+		//when(paymentService.processPayment()).thenThrow(new NotEnoughMoneyException());
+
+		given(paymentService.processPayment()).willThrow(new NotEnoughMoneyException());
 
 		var expected = mapper.writeValueAsString(e);
 
